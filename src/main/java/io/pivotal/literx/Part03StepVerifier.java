@@ -77,7 +77,9 @@ public class Part03StepVerifier {
 		StepVerifier.withVirtualTime(supplier)
 				.thenAwait(Duration.ofSeconds(1))
 				.expectNext(i++)
-				.verifyComplete();;
+				.expectComplete()
+				.verifyThenAssertThat()
+				.tookLessThan(Duration.ofSeconds(3600));
 	}
 
 	private void fail() {
