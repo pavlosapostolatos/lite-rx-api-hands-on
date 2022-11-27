@@ -1,6 +1,8 @@
 package io.pivotal.literx;
 
 import io.pivotal.literx.domain.User;
+import java.util.ArrayList;
+import java.util.function.Function;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -17,7 +19,18 @@ public class Part08OtherOperations {
 
 	// TODO Create a Flux of user from Flux of username, firstname and lastname.
 	Flux<User> userFluxFromStringFlux(Flux<String> usernameFlux, Flux<String> firstnameFlux, Flux<String> lastnameFlux) {
-		return null;
+
+		ArrayList<Flux<String>> publishers = new ArrayList<>();
+		publishers.add(usernameFlux);
+		publishers.add(firstnameFlux);
+		publishers.add(lastnameFlux);
+
+		return Flux.zip(
+				publishers,
+				arr -> {
+					return new User((String)arr[0],(String)arr[1],(String)arr[2]);
+				}
+		);
 	}
 
 //========================================================================================
@@ -38,7 +51,7 @@ public class Part08OtherOperations {
 
 	// TODO Convert the input Flux<User> to a Mono<Void> that represents the complete signal of the flux
 	Mono<Void> fluxCompletion(Flux<User> flux) {
-		return null;
+		return flux.then();
 	}
 
 //========================================================================================
